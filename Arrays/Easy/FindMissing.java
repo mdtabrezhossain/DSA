@@ -47,6 +47,7 @@ class FindMissing {
 
         for (int currentNumber = 1; currentNumber <= n; currentNumber++) {
             xorAll ^= currentNumber;
+            System.out.println(xorAll);
         }
 
         for (int number : numbers) {
