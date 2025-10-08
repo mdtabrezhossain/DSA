@@ -19,7 +19,7 @@ class CeilFloor {
             } else if (arr[mid] > target) {
                 ceil = arr[mid];
                 end = mid - 1;
-            } else {
+            } else if (arr[mid] < target) {
                 floor = arr[mid];
                 start = mid + 1;
             }

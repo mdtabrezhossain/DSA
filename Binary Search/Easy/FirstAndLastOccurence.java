@@ -1,8 +1,8 @@
 package Easy;
 
-class FirstAndLastOccurrenceInSortedArray {
+class FirstAndLastOccurrence {
     public static void main(String[] args) {
-        int[] arr = { 1, 2, 6, 5, 6, 8, 8, 8, 9 };
+        int[] arr = { 1, 2, 6, 5, 6, 8, 8, 8, 8, 8, 8, 9 };
         int target = 8;
 
         // // Approach 1 ---
@@ -27,14 +27,12 @@ class FirstAndLastOccurrenceInSortedArray {
         int lastSeenIdx = -1;
         int start = 0;
         int end = arr.length - 1;
-        int lowerBound = arr.length;
-        int upperBound = arr.length;
 
         while (start <= end) {
             int mid = start + (end - start) / 2;
 
             if (arr[mid] == target) {
-                lowerBound = mid;
+                firstSeenIdx = mid;
                 end = mid - 1;
             } else if (arr[mid] > target) {
                 end = mid - 1;
@@ -43,8 +41,7 @@ class FirstAndLastOccurrenceInSortedArray {
             }
         }
 
-        if (lowerBound != arr.length && arr[lowerBound] == target) {
-            firstSeenIdx = lowerBound;
+        if (firstSeenIdx != -1) {
             start = 0;
             end = arr.length - 1;
 
@@ -52,22 +49,19 @@ class FirstAndLastOccurrenceInSortedArray {
                 int mid = start + (end - start) / 2;
 
                 if (arr[mid] == target) {
-                    upperBound = mid;
+                    lastSeenIdx = mid;
                     start = mid + 1;
-                } else if (arr[mid] > target) {
-                    end = mid - 1;
+                } else if (arr[mid] < target) {
+                    start = mid + 1;
                 } else {
-                    start = mid + 1;
+                    end = mid - 1;
                 }
-            }
-
-            if (upperBound != arr.length) {
-                lastSeenIdx = upperBound;
             }
         }
 
         System.out.printf("First occurrence at index: %d", firstSeenIdx);
         System.out.printf("\nLast occurrence at index: %d", lastSeenIdx);
+        System.out.printf("\nCount of target is: %d", (lastSeenIdx - firstSeenIdx + 1));
 
     }
 }
