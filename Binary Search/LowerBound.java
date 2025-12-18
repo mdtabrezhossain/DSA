@@ -1,5 +1,3 @@
-package Easy;
-
 class LowerBound {
     public static void main(String[] args) {
         int[] numbers = { 1, 2, 2, 3, 4, 5, 5, 10, 10, 11, 11 };

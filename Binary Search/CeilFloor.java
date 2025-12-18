@@ -1,5 +1,3 @@
-package Medium;
-
 class CeilFloor {
     public static void main(String[] args) {
         int[] arr = { 3, 4, 4, 4, 8, 9, 9, 10, 12, 12, 14, 15 };

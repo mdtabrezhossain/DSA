@@ -1,5 +1,3 @@
-package Easy;
-
 class SearchInsertPosition {
     public static void main(String[] args) {
 

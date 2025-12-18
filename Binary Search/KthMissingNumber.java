@@ -1,16 +1,10 @@
-package Easy;
-
 class KthMissingNumber {
     public static void main(String[] args) {
         int[] array = { 3, 5, 7, 11 };
         int k = 4;
 
         // // Approach 1 ---
-        // int max = Integer.MIN_VALUE;
-
-        // for (int num : array) {
-        // max = Math.max(num, max);
-        // }
+        // int max = array[array.length -1];
 
         // boolean[] isPresentInArrayHashTable = new boolean[max + 1];
 

@@ -1,5 +1,3 @@
-package Easy;
-
 class FirstAndLastOccurrence {
     public static void main(String[] args) {
         int[] arr = { 1, 2, 6, 5, 6, 8, 8, 8, 8, 8, 8, 9 };

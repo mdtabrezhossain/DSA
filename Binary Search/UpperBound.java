@@ -1,5 +1,3 @@
-package Easy;
-
 class UpperBound {
     public static void main(String[] args) {
         int[] numbers = { 1, 2, 2, 3, 4, 5, 8, 8, 10, 11 };
