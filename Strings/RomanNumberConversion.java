@@ -20,7 +20,7 @@ class RomanNumberConversion {
             if (i < romanNumber.length() - 1) {
                 int nextValue = map.get(romanNumber.charAt(i + 1));
 
-                if (currentValue > nextValue) {
+                if (currentValue >= nextValue) {
                     result += currentValue;
                 } else {
                     result -= currentValue;

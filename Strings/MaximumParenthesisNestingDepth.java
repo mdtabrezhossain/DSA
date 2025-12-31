@@ -5,16 +5,13 @@ class MaximumNestingParenthesisDepth {
         String str = "()(())((()()))";
         int maxDepth = 0;
         int currentDepth = 0;
-        Stack<Character> stack = new Stack<>();
 
         for (char c : str.toCharArray()) {
             if (c == '(') {
                 currentDepth++;
                 maxDepth = Math.max(maxDepth, currentDepth);
-                stack.push('(');
             } else if (c == ')') {
                 currentDepth--;
-                stack.pop();
             }
         }
 
