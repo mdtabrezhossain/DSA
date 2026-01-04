@@ -1,10 +1,9 @@
 class CheckSubsequenceExistenceWithSumK {
     public static void main(String[] args) {
         int[] array = { 5, 9, 4 };
-        int k = 9;
 
         boolean result = hasSubsequence(array, k, 0, 0);
-        System.out.println("Do any Subsequences exist with sum equal to k: " + result);
+        System.out.println("Do any subsequences exist with sum equal to k: " + result);
     }
 
     static boolean hasSubsequence(int[] array, int k, int sum, int index) {
@@ -20,9 +19,18 @@ class CheckSubsequenceExistenceWithSumK {
             return false;
         }
 
-        boolean foundWithCurrent = hasSubsequence(array, k, sum + array[index], index + 1);
-        boolean foundWithoutCurrent = hasSubsequence(array, k, sum, index + 1);
+        boolean isFoundWithCurrent = hasSubsequence(array, k, sum + array[index], index + 1);
 
-        return foundWithCurrent || foundWithoutCurrent;
+        if (isFoundWithCurrent) {
+            return true;
+        }
+
+        boolean isFoundWithoutCurrent = hasSubsequence(array, k, sum, index + 1);
+
+        if (isFoundWithoutCurrent) {
+            return true;
+        }
+
+        return false;
     }
 }
