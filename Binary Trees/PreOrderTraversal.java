@@ -17,7 +17,6 @@ class PreOrderTraversal {
         }
 
         Stack<TreeNode> stack = new Stack<>();
-
         stack.push(root);
 
         while (!stack.isEmpty()) {
