@@ -1,4 +1,4 @@
-class Solution {
+class MaximumSubArraySumWithDeletion {
     static int maximumSum(int[] arr) {
         // Maximum subarray sum ending at the current index without any deletion
         int localMaxSum = arr[0];
