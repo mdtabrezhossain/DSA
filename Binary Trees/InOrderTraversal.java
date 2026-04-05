@@ -1,7 +1,8 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 class InOrderTraversal {
-
     void traverse(TreeNode root) {
         if (root == null) {
             return;
@@ -37,10 +38,48 @@ class InOrderTraversal {
         }
     }
 
-}
+    public List<Integer> inorderTraversalLeetcode(TreeNode root) {
+        Stack<TreeNode> stack = new Stack<>();
+        ArrayList<Integer> result = new ArrayList<>();
 
-class TreeNode {
-    int value;
-    TreeNode left;
-    TreeNode right;
+        if (root == null) {
+            return result;
+        }
+
+        TreeNode node = root;
+
+        while (true) {
+            if (node != null) {
+                stack.push(node);
+                node = node.left;
+            } else {
+                if (stack.isEmpty()) {
+                    break;
+                }
+
+                node = stack.pop();
+                result.add(node.val);
+
+                node = node.right;
+            }
+        }
+
+        return result;
+    }
+
+    List<Integer> inorderTraversal(TreeNode node) {
+        List<Integer> result = new ArrayList<>();
+        helper(node, result);
+        return result;
+    }
+
+    void helper(TreeNode node, List<Integer> result) {
+        if (node == null) {
+            return;
+        }
+
+        helper(node.left, result);
+        result.add(node.value);
+        helper(node.right, result);
+    }
 }
