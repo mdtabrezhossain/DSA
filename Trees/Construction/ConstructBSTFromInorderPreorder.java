@@ -1,3 +1,7 @@
+import java.util.HashMap;
+
+import javax.swing.tree.TreeNode;
+
 class ConstructBSTFromInorderPreorder {
     HashMap<Integer, Integer> inorderIdxMap = new HashMap<>();
     int preorderIdx = 0;
@@ -12,8 +16,8 @@ class ConstructBSTFromInorderPreorder {
         return root;
     }
 
-    private TreeNode helper(int[] preorder, int start, int end) {
-        if (start > end) {
+    private TreeNode constructSubtree(int[] preorder, int inorderStartIdx, int inorderEndIdx) {
+        if (inorderStartIdx > inorderEndIdx) {
             return null;
         }
 
@@ -21,10 +25,13 @@ class ConstructBSTFromInorderPreorder {
         TreeNode node = new TreeNode(value);
         preorderIdx++;
 
-        int inorderIdx = inorderIdxMap.get(value);
-        node.left = helper(preorder, start, inorderIdx - 1);
-        node.right = helper(preorder, inorderIdx + 1, end);
+        int nodeIdx = inorderIdxMap.get(value);
+        node.left = constructSubtree(preorder, inorderStartIdx, nodeIdx - 1);
+        node.right = constructSubtree(preorder, nodeIdx + 1, inorderEndIdx);
 
         return node;
     }
 }
+
+// Note : preorder decides who is the current root and inorder decides who
+// belong to the left and right subtree.
