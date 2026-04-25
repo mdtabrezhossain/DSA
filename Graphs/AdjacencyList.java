@@ -6,9 +6,9 @@ class AdjacencyList {
             adjacencyList.add(new ArrayList<>());
         }
 
-        for (int[] e : edges) {
-            int source = e[0];
-            int destination = e[1];
+        for (int[] edge : edges) {
+            int source = edge[0];
+            int destination = edge[1];
 
             if (!adjacencyList.get(source).contains(destination)) {
                 adjacencyList.get(source).add(destination);
