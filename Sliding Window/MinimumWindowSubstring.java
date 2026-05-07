@@ -49,4 +49,45 @@ class MinimumWindowSubstring {
         }
         return true;
     }
+
+    String minWindow(String givenString, String targetString) {
+        int[] targetCharFreq = new int[128];
+
+        for (char c : targetString.toCharArray()) {
+            targetCharFreq[c]++;
+        }
+
+        String result = "";
+
+        for (int i = 0; i <= givenString.length() - targetString.length(); i++) {
+            int[] currentCharFreq = new int[128];
+
+            for (int j = i; j < givenString.length(); j++) {
+                char c = givenString.charAt(j);
+                currentCharFreq[c]++;
+
+                if (hasAllTargetCharFreq(currentCharFreq, targetCharFreq)) {
+                    String subString = givenString.substring(i, j + 1);
+
+                    if (result.equals("") || subString.length() < result.length()) {
+                        result = subString;
+                    }
+
+                    break;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    private boolean hasAllTargetCharFreq(int[] currentCharFreq, int[] targetCharFreq) {
+        for (int i = 0; i < 128; i++) {
+            if (currentCharFreq[i] < targetCharFreq[i]) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }
