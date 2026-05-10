@@ -74,3 +74,6 @@ class SwimInRisingWater {
         return false;
     }
 }
+
+// Note: a better solution is using the dijkstra's algorithm because the
+// question is same as path with minimum effort
