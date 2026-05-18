@@ -4,10 +4,10 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 class CheapestFlightsWithinKStops {
-    public int findCheapestPrice(int n, int[][] flights, int source, int destination, int k) {
-        ArrayList<ArrayList<int[]>> graph = createGraph(n, flights);
+    public int findCheapestPrice(int totalVertices, int[][] edges, int source, int destination, int k) {
+        ArrayList<ArrayList<int[]>> graph = createGraph(totalVertices, edges);
 
-        int[] distances = new int[n];
+        int[] distances = new int[totalVertices];
         Arrays.fill(distances, Integer.MAX_VALUE);
         distances[source] = 0;
 
@@ -60,4 +60,31 @@ class CheapestFlightsWithinKStops {
 
         return graph;
     }
+
+    int findCheapestPrice2(int totalVertices, int[][] edges, int source, int destination, int k) {
+        int[] distancesWithinKStops = new int[totalVertices];
+        Arrays.fill(distancesWithinKStops, Integer.MAX_VALUE);
+        distancesWithinKStops[source] = 0;
+
+        for (int i = 0; i <= k; i++) {
+            int[] tempDistance = Arrays.copyOf(distancesWithinKStops, totalVertices);
+
+            for (int[] edge : edges) {
+                int currentSource = edge[0];
+                int currentDestination = edge[1];
+                int currentDistance = edge[2];
+                int newDistance = distancesWithinKStops[currentSource] + currentDistance;
+
+                if (distancesWithinKStops[currentSource] != Integer.MAX_VALUE
+                        && newDistance < tempDistance[currentDestination]) {
+                    tempDistance[currentDestination] = newDistance;
+                }
+            }
+
+            distancesWithinKStops = tempDistance;
+        }
+
+        return distancesWithinKStops[destination] == Integer.MAX_VALUE ? -1 : distancesWithinKStops[destination];
+    }
+
 }
