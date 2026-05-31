@@ -27,4 +27,30 @@ class ClimbingStairs {
 
         return totalWays;
     }
+
+    int climbStairs2(int steps) {
+        int[] memo = new int[steps + 2];
+        memo[steps + 1] = 0;
+        memo[steps] = 1;
+
+        for (int stair = steps - 1; stair >= 0; stair--) {
+            memo[stair] = memo[stair + 1] + memo[stair + 2];
+        }
+
+        return memo[0];
+    }
+
+    int climbStairs3(int steps) {
+        int waysFromNext = 1;
+        int waysFromAfterNext = 0;
+
+        for (int stair = steps - 1; stair >= 0; stair--) {
+            int ways = waysFromNext + waysFromAfterNext;
+
+            waysFromAfterNext = waysFromNext;
+            waysFromNext = ways;
+        }
+
+        return waysFromNext;
+    }
 }
