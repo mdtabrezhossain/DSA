@@ -1,36 +1,54 @@
-import java.util.Arrays;
-
 class KokoEatingBananas {
-    static int minEatingSpeed(int[] piles, int h) {
-        int low = 1;
-        int high = Arrays.stream(piles).max().getAsInt();
-        int minEatingSpeed = high;
+    int minEatingSpeed(int[] piles, int maxHours) {
+        int speed = 1;
 
-        while (low <= high) {
-            int mid = low + (high - low) / 2;
+        while (true) {
+            int hours = 0;
 
-            long totalEatingHours = getTotalEatingHours(mid, piles);
-            if (totalEatingHours <= h) {
-                minEatingSpeed = mid;
-                high = mid - 1;
-            } else {
-                low = mid + 1;
+            for (int pile : piles) {
+                hours += Math.ceilDiv(pile, speed);
             }
-        }
 
-        return minEatingSpeed;
+            if (hours <= maxHours) {
+                return speed;
+            }
+
+            speed++;
+        }
     }
 
-    static long getTotalEatingHours(int eatingSpeedPerHour, int[] piles) {
-        long totalEatingHours = 0;
+    int minEatingSpeed2(int[] piles, int maxHours) {
+        int speed = 1;
+        int minSpeed = 1;
+        int maxSpeed = Integer.MIN_VALUE;
 
-        for (int noOfBananas : piles) {
-            totalEatingHours += noOfBananas / eatingSpeedPerHour;
-            if (noOfBananas % eatingSpeedPerHour != 0) {
-                totalEatingHours++;
+        for (int pile : piles) {
+            maxSpeed = Math.max(maxSpeed, pile);
+        }
+
+        while (minSpeed <= maxSpeed) {
+            int midSpeed = minSpeed + (maxSpeed - minSpeed) / 2;
+
+            long hours = getHours(midSpeed, piles);
+
+            if (hours <= maxHours) {
+                speed = midSpeed;
+                maxSpeed = midSpeed - 1;
+            } else {
+                minSpeed = midSpeed + 1;
             }
         }
 
-        return totalEatingHours;
+        return speed;
+    }
+
+    private long getHours(int speed, int[] piles) {
+        long hours = 0;
+
+        for (int pile : piles) {
+            hours += Math.ceilDiv(pile, speed);
+        }
+
+        return hours;
     }
 }
