@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 class ReorderList {
     ListNode left;
 
@@ -48,6 +50,8 @@ class ReorderList {
             return;
 
         helper(right.next);
+        if (head == null)
+            return null;
 
         if (left == null)
             return;
@@ -63,5 +67,63 @@ class ReorderList {
         left.next = right;
 
         left = right.next;
+    }
+
+    void reorderList3(ListNode head) {
+        if (head == null)
+            return;
+
+        ListNode a = head;
+
+        ListNode middle = middleOfList(head);
+        ListNode b = reverseList(middle);
+
+        ListNode c = null;
+        ListNode d = null;
+
+        while (a.next != null && b.next != null) {
+            c = a.next;
+            d = b.next;
+
+            a.next = b;
+            b.next = c;
+
+            a = c;
+            b = d;
+        }
+    }
+
+    ListNode reverseList(ListNode head) {
+        if (head == null)
+            return null;
+
+        ListNode before = null;
+        ListNode current = head;
+        ListNode after = null;
+
+        while (current != null) {
+            after = current.next;
+            current.next = before;
+
+            before = current;
+            current = after;
+        }
+
+        return before;
+    }
+
+    ListNode middleOfList(ListNode head) {
+        if (head == null)
+            return null;
+
+        ListNode i = head;
+        ListNode j = head;
+
+        while (j != null && j.next != null) {
+            i = i.next;
+            j = j.next.next;
+        }
+
+        return i;
     }
 }
