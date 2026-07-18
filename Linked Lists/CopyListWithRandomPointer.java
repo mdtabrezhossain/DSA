@@ -1,3 +1,7 @@
+import java.util.HashMap;
+
+import org.w3c.dom.Node;
+
 class CopyListWithRandomPointer {
     Node copyRandomList(Node head) {
         if (head == null)
@@ -54,4 +58,50 @@ class CopyListWithRandomPointer {
         return map.get(head);
     }
 
+    Node copyRandomList3(Node head) {
+        if (head == null)
+            return null;
+
+        Node current = head;
+        Node temp = null;
+        Node copy = null;
+
+        while (current != null) {
+            temp = current.next;
+
+            copy = new Node(current.val);
+            current.next = copy;
+
+            copy.next = temp;
+            current = temp;
+        }
+
+        current = head;
+
+        while (current != null) {
+            copy = current.next;
+
+            if (current.random != null)
+                copy.random = current.random.next;
+
+            current = current.next.next;
+        }
+
+        current = head;
+        Node newHead = head.next;
+
+        while (current != null) {
+            copy = current.next;
+
+            temp = copy.next;
+            current.next = temp;
+
+            if (temp != null)
+                copy.next = temp.next;
+
+            current = temp;
+        }
+
+        return newHead;
+    }
 }
