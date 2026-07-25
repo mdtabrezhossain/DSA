@@ -103,5 +103,15 @@ class CopyListWithRandomPointer {
         }
 
         return newHead;
-    }
+    }}
+
+Node current = head;
+
+    while(current!=null)
+    {
+    Node temp = current.next;
+    Node copy = new Node(current.val);
+    current.next = copy;
+    copy.next = temp;
+    current = temp;
 }
