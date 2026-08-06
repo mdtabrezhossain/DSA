@@ -50,7 +50,7 @@ class ReverseNodesInkGroup {
         while (currentGroupHead != null) {
             ListNode currentGroupTail = currentGroupHead;
 
-            for (int i = 1; i < k; i++) {
+            for (int i = 1; i <= k + 1; i++) {
                 if (currentGroupTail == null)
                     break;
 
