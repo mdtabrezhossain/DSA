@@ -1,4 +1,4 @@
-class Solution {
+class SameTree {
     boolean isSameTree(TreeNode node1, TreeNode node2) {
         if (node1 == null && node2 == null)
             return true;
