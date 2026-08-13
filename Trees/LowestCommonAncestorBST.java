@@ -1,33 +1,33 @@
 class LowestCommonAncestorBST {
-    TreeNode result = null;
-
     TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-        if (p.val < q.val) {
-            helper(root, p, q);
-        } else {
-            helper(root, q, p);
-        }
+        if (root == null)
+            return null;
 
-        return result;
+        return helper(root, p, q);
     }
 
-    void helper(TreeNode node, TreeNode targetNode1, TreeNode targetNode2) {
-        if (node == null) {
-            return;
+    TreeNode helper(TreeNode root, TreeNode a, TreeNode b) {
+        if (a.val < root.val && b.val < root.val)
+            return helper(root.left, a, b);
+
+        else if (a.val > root.val && b.val > root.val)
+            return helper(root.right, a, b);
+
+        else
+            return root;
+    }
+
+    TreeNode lowestCommonAncestor2(TreeNode root, TreeNode p, TreeNode q) {
+        while (root != null) {
+            if (p.val < root.val && q.val < root.val) {
+                root = root.left;
+            } else if (p.val > root.val && q.val > root.val) {
+                root = root.right;
+            } else {
+                return root;
+            }
         }
 
-        if (node == targetNode1 || node == targetNode2) {
-            result = node;
-            return;
-        }
-
-        if (node.val < targetNode1.val) {
-            helper(node.right, targetNode1, targetNode2);
-        } else if (node.val > targetNode2.val) {
-            helper(node.left, targetNode1, targetNode2);
-        } else {
-            result = node;
-            return;
-        }
+        return null;
     }
 }
