@@ -19,4 +19,37 @@ class KthSmallestElementInBST {
 
         return helper(root.right, k);
     }
+
+    int kthSmallest(TreeNode root, int k) {
+        while (root != null) {
+            if (root.left != null) {
+                TreeNode predecessor = root.left;
+
+                while (predecessor.right != null && predecessor.right != root)
+                    predecessor = predecessor.right;
+
+                if (predecessor.right == null) {
+                    predecessor.right = root;
+                    root = root.left;
+                } else {
+                    predecessor.right = null;
+                    k--;
+
+                    if (k == 0)
+                        return root.val;
+
+                    root = root.right;
+                }
+            } else {
+                k--;
+
+                if (k == 0)
+                    return root.val;
+
+                root = root.right;
+            }
+        }
+
+        return -1;
+    }
 }
