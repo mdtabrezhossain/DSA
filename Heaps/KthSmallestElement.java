@@ -1,6 +1,3 @@
-import java.util.Collections;
-import java.util.PriorityQueue;
-
 class KthSmallestElement {
     static int findKthSmallest(int[] array, int k) {
         PriorityQueue<Integer> maxHeap = new PriorityQueue<>(Collections.reverseOrder());
