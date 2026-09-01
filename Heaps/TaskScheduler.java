@@ -1,8 +1,3 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.PriorityQueue;
-
 class TaskScheduler {
     static int leastInterval(char[] tasks, int n) {
         HashMap<Character, Integer> charCountMap = new HashMap<>();

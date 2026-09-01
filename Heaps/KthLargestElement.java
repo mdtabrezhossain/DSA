@@ -1,24 +1,13 @@
-class KthLargest {
-    PriorityQueue<Integer> minHeap;
-    int K;
+class KthLargestElementInArray {
+    int findKthLargest(int[] numbers, int k) {
+        PriorityQueue<Integer> minHeap = new PriorityQueue<>();
 
-    KthLargest(int k, int[] stream) {
-        K = k;
-        minHeap = new PriorityQueue<>();
-
-        for (int value : stream) {
+        for (int value : numbers) {
             minHeap.offer(value);
 
-            if (minHeap.size() > K)
+            if (minHeap.size() > k)
                 minHeap.poll();
         }
-    }
-
-    int add(int value) {
-        minHeap.offer(value);
-
-        if (minHeap.size() > K)
-            minHeap.poll();
 
         return minHeap.peek();
     }
