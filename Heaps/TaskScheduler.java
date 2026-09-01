@@ -1,36 +1,40 @@
 class TaskScheduler {
-    static int leastInterval(char[] tasks, int n) {
-        HashMap<Character, Integer> charCountMap = new HashMap<>();
-        for (char c : tasks) {
-            charCountMap.put(
-                    c, charCountMap.getOrDefault(c, 0) + 1);
-        }
+    int leastInterval(char[] tasks, int cooldown) {
+        HashMap<Character, Integer> frequencyMap = new HashMap<>();
+
+        for (char c : tasks)
+            frequencyMap.put(
+                    c, frequencyMap.getOrDefault(c, 0) + 1);
 
         PriorityQueue<Map.Entry<Character, Integer>> maxHeap = new PriorityQueue<>(
                 (a, b) -> Integer.compare(b.getValue(), a.getValue()));
-        maxHeap.addAll(charCountMap.entrySet());
+
+        maxHeap.addAll(frequencyMap.entrySet());
 
         int interval = 0;
+
         while (!maxHeap.isEmpty()) {
-            int cycle = n + 1;
-            ArrayList<Map.Entry<Character, Integer>> temp = new ArrayList<>();
+            int slots = cooldown + 1;
+            ArrayList<Map.Entry<Character, Integer>> coolDownBuffer = new ArrayList<>();
 
-            while (cycle > 0 && !maxHeap.isEmpty()) {
+            while (slots > 0 && !maxHeap.isEmpty()) {
                 Map.Entry<Character, Integer> entry = maxHeap.poll();
+                int frequency = entry.getValue();
+
+                frequency--;
                 interval++;
-                cycle--;
+                slots--;
 
-                entry.setValue(entry.getValue() - 1);
-                if (entry.getValue() > 0) {
-                    temp.add(entry);
-                }
+                entry.setValue(frequency);
+
+                if (frequency > 0)
+                    coolDownBuffer.add(entry);
             }
 
-            maxHeap.addAll(temp);
+            maxHeap.addAll(coolDownBuffer);
 
-            if (!maxHeap.isEmpty()) {
-                interval += cycle;
-            }
+            if (!maxHeap.isEmpty())
+                interval += slots;
         }
 
         return interval;
