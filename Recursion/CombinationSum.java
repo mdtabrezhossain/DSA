@@ -1,38 +1,31 @@
-import java.util.ArrayList;
-
 class CombinationSum {
+    List<List<Integer>> combinationSum(int[] numbers, int target) {
+        List<List<Integer>> result = new ArrayList<>();
+        List<Integer> subset = new ArrayList<>();
 
-    static ArrayList<ArrayList<Integer>> combinationSum(int[] candidates, int target) {
-        ArrayList<ArrayList<Integer>> resultList = new ArrayList<>();
-        ArrayList<Integer> combination = new ArrayList<>();
-        helper(candidates, target, resultList, combination, 0, 0);
-        return resultList;
+        helper(0, target, subset, result, numbers);
+
+        return result;
     }
 
-    static void helper(
-            int[] array,
-            int target,
-            ArrayList<ArrayList<Integer>> subSetsList,
-            ArrayList<Integer> subSet,
-            int sum,
-            int idx) {
-        if (idx == array.length || sum > target) {
+    void helper(int i, int sum, List<Integer> subset, List<List<Integer>> result, int[] numbers) {
+        if (sum == 0) {
+            result.add(new ArrayList<>(subset));
             return;
         }
 
-        if (sum == target) {
-            subSetsList.add(new ArrayList<>(subSet));
+        if (i == numbers.length)
             return;
+
+        int number = numbers[i];
+
+        if (number <= sum) {
+            subset.add(number);
+            helper(i, sum - number, subset, result, numbers);
+
+            subset.remove(subset.size() - 1);
         }
 
-        int number = array[idx];
-
-        subSet.add(number);
-        sum += number;
-        helper(array, target, subSetsList, subSet, sum, idx);
-        subSet.remove(subSet.size() - 1);
-        sum -= number;
-
-        helper(array, target, subSetsList, subSet, sum, idx + 1);
+        helper(i + 1, sum, subset, result, numbers);
     }
 }
