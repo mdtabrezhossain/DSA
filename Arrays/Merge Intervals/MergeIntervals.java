@@ -1,39 +1,45 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 class MergeIntervals {
     int[][] merge(int[][] intervals) {
-        ArrayList<int[]> list = new ArrayList<>();
+        List<int[]> result = new ArrayList<>();
 
-        list.addAll(Arrays.asList(intervals));
+        for (int i = 0; i < intervals.length; i++) {
+            int[] current = intervals[i];
 
-        boolean foundOverlap = true;
+            if (current == null)
+                continue;
 
-        while (foundOverlap) {
-            foundOverlap = false;
+            int currentStart = current[0];
+            int currentEnd = current[1];
 
-            for (int i = 0; i < list.size(); i++) {
-                for (int j = i + 1; j < list.size(); j++) {
-                    int[] a = list.get(i);
-                    int[] b = list.get(j);
+            for (int j = i + 1; j < intervals.length; j++) {
+                int[] next = intervals[j];
 
-                    if (a[0] <= b[1] && b[0] <= a[1]) {
-                        int start = Math.min(a[0], b[0]);
-                        int end = Math.max(a[1], b[1]);
+                if (next == null)
+                    continue;
 
-                        list.remove(j);
-                        list.remove(i);
+                int nextStart = next[0];
+                int nextEnd = next[1];
 
-                        list.add(new int[] { start, end });
+                if (currentEnd >= nextStart) {
+                    int start = Math.min(currentStart, nextStart);
+                    int end = Math.max(currentEnd, nextEnd);
 
-                        foundOverlap = true;
-                        break;
-                    }
+                    current[0] = start;
+                    current[1] = end;
+
+                    // discard next interval after merge
+                    intervals[j] = null;
                 }
-
-                if (foundOverlap)
-                    break;
             }
+
+            result.add(current);
         }
 
-        return list.toArray(new int[list.size()][]);
+        return result.toArray(new int[result.size()][]);
     }
 
     int[][] merge2(int[][] intervals) {
@@ -41,25 +47,24 @@ class MergeIntervals {
 
         ArrayList<int[]> result = new ArrayList<>();
 
-        int prevStart = intervals[0][0];
-        int prevEnd = intervals[0][1];
+        int currentStart = intervals[0][0];
+        int currentEnd = intervals[0][1];
 
         for (int i = 1; i < intervals.length; i++) {
-            int start = intervals[i][0];
-            int end = intervals[i][1];
+            int nextStart = intervals[i][0];
+            int nextEnd = intervals[i][1];
 
-            if (prevEnd >= start) {
-                int newEnd = Math.max(end, prevEnd);
-                prevEnd = newEnd;
+            if (currentEnd >= nextStart) {
+                currentEnd = Math.max(currentEnd, nextEnd);
             } else {
-                result.add(new int[] { prevStart, prevEnd });
+                result.add(new int[] { currentStart, currentEnd });
 
-                prevStart = start;
-                prevEnd = end;
+                currentStart = nextStart;
+                currentEnd = nextEnd;
             }
         }
 
-        result.add(new int[] { prevStart, prevEnd });
+        result.add(new int[] { currentStart, currentEnd });
 
         return result.toArray(new int[result.size()][]);
     }
@@ -67,23 +72,23 @@ class MergeIntervals {
     int[][] merge3(int[][] intervals) {
         Arrays.sort(intervals, (a, b) -> Integer.compare(a[0], b[0]));
 
-        int prevIdx = 0;
+        int currentIdx = 0;
 
         for (int i = 1; i < intervals.length; i++) {
-            int prevEnd = intervals[prevIdx][1];
+            int currentEnd = intervals[currentIdx][1];
 
-            int start = intervals[i][0];
-            int end = intervals[i][1];
+            int nextStart = intervals[i][0];
+            int nextEnd = intervals[i][1];
 
-            if (prevEnd >= start) {
-                int newEnd = Math.max(prevEnd, end);
-                intervals[prevIdx][1] = newEnd;
+            if (currentEnd >= nextStart) {
+                int newEnd = Math.max(currentEnd, nextEnd);
+                intervals[currentIdx][1] = newEnd;
             } else {
-                prevIdx++;
-                intervals[prevIdx] = intervals[i];
+                currentIdx++;
+                intervals[currentIdx] = intervals[i];
             }
         }
 
-        return Arrays.copyOf(intervals, prevIdx + 1);
+        return Arrays.copyOf(intervals, currentIdx + 1);
     }
 }
