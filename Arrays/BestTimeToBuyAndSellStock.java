@@ -18,6 +18,7 @@ class BestTimeToBuyAndSellStock {
 
     int maxProfit2(int[] prices) {
         int maxProfit = 0;
+
         int[] nextMaxPrices = new int[prices.length];
         int nextMaxPrice = prices[prices.length - 1];
 
