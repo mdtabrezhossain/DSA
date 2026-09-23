@@ -1,79 +1,37 @@
 class MinimumWindowSubstring {
-    public static void main(String[] args) {
-        String s = "ADOBECODEBANC";
-        String t = "ABC";
-
-        System.out.println(getMinimumStringIncludingTarget(s, t));
-        // Output : BANC
-    }
-
-    static String getMinimumStringIncludingTarget(String string, String target) {
-        int left = 0;
-        int right = 0;
-        int minLength = Integer.MAX_VALUE;
-        int minStart = 0;
-        int[] neededCharCount = new int[128];
-
-        for (char c : target.toCharArray()) {
-            neededCharCount[c]++;
-        }
-
-        int[] haveCharCount = new int[128];
-        while (right <= string.length() - 1) {
-            char c = string.charAt(right);
-            haveCharCount[c]++;
-
-            while (isSufficient(haveCharCount, neededCharCount) && left <= right) {
-                int currentLength = right - left + 1;
-
-                if (currentLength < minLength) {
-                    minLength = currentLength;
-                    minStart = left;
-                }
-
-                haveCharCount[string.charAt(left)]--;
-                left++;
-            }
-
-            right++;
-        }
-
-        return minLength == Integer.MAX_VALUE ? "" : string.substring(minStart, minStart + minLength);
-    }
-
-    static boolean isSufficient(int[] haveCharCount, int[] neededCharCount) {
-        for (int i = 0; i < haveCharCount.length; i++) {
-            if (haveCharCount[i] < neededCharCount[i]) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    String minWindow(String givenString, String targetString) {
-        int[] targetCharFreq = new int[128];
-
-        for (char c : targetString.toCharArray()) {
-            targetCharFreq[c]++;
-        }
-
+    String minWindow(String text, String target) {
         String result = "";
+        int minLength = Integer.MAX_VALUE;
 
-        for (int i = 0; i <= givenString.length() - targetString.length(); i++) {
-            int[] currentCharFreq = new int[128];
+        HashMap<Character, Integer> map = new HashMap<>();
 
-            for (int j = i; j < givenString.length(); j++) {
-                char c = givenString.charAt(j);
-                currentCharFreq[c]++;
+        for (char c : target.toCharArray())
+            map.put(c, map.getOrDefault(c, 0) + 1);
 
-                if (hasAllTargetCharFreq(currentCharFreq, targetCharFreq)) {
-                    String subString = givenString.substring(i, j + 1);
+        for (int i = 0; i < text.length(); i++) {
+            HashMap<Character, Integer> temp = new HashMap<>(map);
 
-                    if (result.equals("") || subString.length() < result.length()) {
-                        result = subString;
+            for (int j = i; j < text.length(); j++) {
+                char c = text.charAt(j);
+
+                if (temp.containsKey(c)) {
+                    int newCount = temp.get(c) - 1;
+
+                    if (newCount == 0)
+                        temp.remove(c);
+                    else
+                        temp.put(c, newCount);
+
+                    if (temp.isEmpty()) {
+                        int currentLength = j - i + 1;
+
+                        if (currentLength < minLength) {
+                            result = text.substring(i, j + 1);
+                            minLength = currentLength;
+                        }
+
+                        break;
                     }
-
-                    break;
                 }
             }
         }
@@ -81,13 +39,47 @@ class MinimumWindowSubstring {
         return result;
     }
 
-    private boolean hasAllTargetCharFreq(int[] currentCharFreq, int[] targetCharFreq) {
-        for (int i = 0; i < 128; i++) {
-            if (currentCharFreq[i] < targetCharFreq[i]) {
-                return false;
+    String minWindow2(String text, String target) {
+        int[] need = new int[128];
+
+        for (char c : target.toCharArray())
+            need[c]++;
+
+        String result = "";
+        int minLength = Integer.MAX_VALUE;
+
+        int start = 0;
+        int end = 0;
+        int count = target.length();
+
+        while (end < text.length()) {
+            char c = text.charAt(end);
+
+            if (need[c] > 0)
+                count--;
+
+            need[c]--;
+
+            while (count == 0) {
+                int length = end - start + 1;
+
+                if (length < minLength) {
+                    result = text.substring(start, end + 1);
+                    minLength = length;
+                }
+
+                c = text.charAt(start);
+                need[c]++;
+
+                if (need[c] > 0)
+                    count++;
+
+                start++;
             }
+
+            end++;
         }
 
-        return true;
+        return result;
     }
 }
