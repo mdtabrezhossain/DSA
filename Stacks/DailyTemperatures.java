@@ -2,8 +2,8 @@ class DailyTemperatures {
     int[] dailyTemperatures(int[] temperatures) {
         int[] result = new int[temperatures.length];
 
-        for (int i = 0; i < temperatures.length; i++) {
-            for (int j = i + 1; j < temperatures.length; j++) {
+        for (int i = 0; i < result.length; i++) {
+            for (int j = i + 1; j < result.length; j++) {
                 if (temperatures[j] > temperatures[i]) {
                     result[i] = j - i;
                     break;
@@ -15,24 +15,19 @@ class DailyTemperatures {
     }
 
     int[] dailyTemperatures2(int[] temperatures) {
-        int[] results = new int[temperatures.length];
-        Deque<Integer> stack = new ArrayDeque<>();
+        int[] result = new int[temperatures.length];
+        Stack<Integer> stack = new Stack<>();
 
-        for (int currentDay = temperatures.length - 1; currentDay > -1; currentDay--) {
-            int currentTemperature = temperatures[currentDay];
-
-            while (!stack.isEmpty() && temperatures[stack.peek()] <= currentTemperature) {
+        for (int i = temperatures.length - 1; i >= 0; i--) {
+            while (!stack.isEmpty() && temperatures[i] >= temperatures[stack.peek()])
                 stack.pop();
-            }
 
-            if (!stack.isEmpty()) {
-                int nextWarmerDay = stack.peek();
-                results[currentDay] = nextWarmerDay - currentDay;
-            }
+            if (!stack.isEmpty())
+                result[i] = stack.peek() - i;
 
-            stack.push(currentDay);
+            stack.push(i);
         }
 
-        return results;
+        return result;
     }
 }
