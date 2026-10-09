@@ -1,49 +1,89 @@
 class MergeTwoSortedList {
-    ListNode mergeTwoLists(ListNode i, ListNode j) {
-        if (i == null && j == null)
+    ListNode mergeTwoLists(ListNode head1, ListNode head2) {
+        if (head1 == null && head2 == null)
             return null;
 
-        if (i == null)
-            return j;
+        if (head1 == null)
+            return head2;
 
-        if (j == null)
-            return i;
+        if (head2 == null)
+            return head1;
 
-        ListNode start;
-        ListNode end;
+        ArrayList<Integer> values = new ArrayList<>();
+        ListNode current = head1;
 
-        if (i.val <= j.val) {
-            start = i;
-            end = i;
-
-            i = i.next;
-        } else {
-            start = j;
-            end = j;
-
-            j = j.next;
+        while (current != null) {
+            values.add(current.val);
+            current = current.next;
         }
 
-        while (i != null && j != null) {
-            if (i.val <= j.val) {
-                end.next = i;
-                end = i;
+        current = head2;
 
-                i = i.next;
+        while (current != null) {
+            values.add(current.val);
+            current = current.next;
+        }
+
+        values.sort(null);
+        // Collections.sort(values);
+
+        ListNode head = new ListNode(values.get(0));
+        current = head;
+
+        for (int i = 1; i < values.size(); i++) {
+            ListNode node = new ListNode(values.get(i));
+
+            current.next = node;
+            current = node;
+        }
+
+        return head;
+    }
+
+    ListNode mergeTwoLists2(ListNode head1, ListNode head2) {
+        if (head1 == null && head2 == null)
+            return null;
+
+        if (head1 == null)
+            return head2;
+
+        if (head2 == null)
+            return head1;
+
+        ListNode a = head1;
+        ListNode b = head2;
+
+        ListNode head = null;
+
+        if (a.val <= b.val) {
+            head = a;
+            a = a.next;
+        } else {
+            head = b;
+            b = b.next;
+        }
+
+        ListNode current = head;
+
+        while (a != null && b != null) {
+            if (a.val <= b.val) {
+                current.next = a;
+                current = a;
+
+                a = a.next;
             } else {
-                end.next = j;
-                end = j;
+                current.next = b;
+                current = b;
 
-                j = j.next;
+                b = b.next;
             }
         }
 
-        if (i == null) {
-            end.next = j;
-        } else {
-            end.next = i;
-        }
+        if (a == null)
+            current.next = b;
+        else
+            current.next = a;
 
-        return start;
+        return head;
     }
 }

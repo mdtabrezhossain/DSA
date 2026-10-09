@@ -1,68 +1,24 @@
-import java.util.ArrayList;
-
 class RemoveNthNodeFromEnd {
-    int N;
-
     ListNode removeNthFromEnd(ListNode head, int n) {
-        ArrayList<ListNode> nodes = new ArrayList<>();
-
-        ListNode current = head;
-
-        while (current != null) {
-            nodes.add(current);
-            current = current.next;
-        }
-
-        int idx = nodes.size() - n;
-
-        if (idx == 0)
-            return head.next;
-
-        nodes.get(idx - 1).next = nodes.get(idx).next;
-
-        return head;
-    }
-
-    ListNode removeNthFromEnd2(ListNode head, int n) {
-        N = n;
-        return helper(head);
-    }
-
-    private ListNode helper(ListNode node) {
-        if (node == null)
-            return null;
-
-        node.next = helper(node.next);
-
-        N--;
-
-        if (N == 0)
-            return node.next;
-
-        return node;
-    }
-
-    ListNode removeNthFromEnd3(ListNode head, int n) {
-        if (head == null)
-            return null;
-
         ListNode current = head;
         int length = 0;
 
         while (current != null) {
-            length++;
             current = current.next;
+            length++;
         }
 
-        int targetPos = length - n + 1;
-
-        if (targetPos == 1)
+        if (n == length)
             return head.next;
 
-        current = head;
+        int targetPos = length - n;
 
-        for (int pos = 1; pos <= targetPos - 2; pos++) {
+        current = head;
+        int pos = 1;
+
+        while (pos < targetPos) {
             current = current.next;
+            pos++;
         }
 
         current.next = current.next.next;
@@ -70,22 +26,26 @@ class RemoveNthNodeFromEnd {
         return head;
     }
 
-    ListNode removeNthFromEnd4(ListNode head, int n) {
-        ListNode i = head;
-        ListNode j = i;
+    ListNode removeNthFromEnd2(ListNode head, int n) {
+        ListNode a = head;
+        ListNode b = head;
 
-        for (int k = 1; k <= n; k++)
-            j = j.next;
+        int gap = 0;
 
-        if (j == null)
-            return head.next;
-
-        while (j.next != null) {
-            i = i.next;
-            j = j.next;
+        while (gap < n) {
+            b = b.next;
+            gap++;
         }
 
-        i.next = i.next.next;
+        if (b == null)
+            return head.next;
+
+        while (b.next != null) {
+            a = a.next;
+            b = b.next;
+        }
+
+        a.next = a.next.next;
 
         return head;
     }
