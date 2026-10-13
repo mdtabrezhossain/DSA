@@ -1,62 +1,53 @@
 class DiameterOfTree {
-
-    // Diameter = number of edges in the longest path between any two nodes
-    int diameter = 0;
+    int diameter;
 
     int diameterOfBinaryTree(TreeNode root) {
+        diameter = 0;
+
         getHeight(root);
         return diameter;
-
     }
 
     int getHeight(TreeNode node) {
-        if (node == null) {
+        if (node == null)
             return 0;
-        }
 
-        // get height left and right subtrees
         int leftHeight = getHeight(node.left);
         int rightHeight = getHeight(node.right);
 
-        // get diameter passing from the current node
-        diameter = Math.max(leftHeight + rightHeight, diameter);
+        diameter = Math.max(diameter, leftHeight + rightHeight);
 
-        // return height of the longest subtree to the parent including its connecting
-        // edge to the
-        // current node
-        return Math.max(leftHeight, rightHeight) + 1;
+        int currentHeight = 1 + Math.max(leftHeight, rightHeight);
+
+        return currentHeight;
     }
 
-    int diameterOfBinaryTree2(TreeNode root) {
+    int diameterOfBinaryTree(TreeNode root) {
         int diameter = 0;
 
-        Stack<Pair<TreeNode, Boolean>> stack = new Stack<>();
-        Map<TreeNode, Integer> height = new HashMap<>();
+        Map<TreeNode, Integer> heights = new HashMap<>();
+        Stack<TreeNode> stack = new Stack<>();
 
         if (root != null)
-            stack.push(new Pair<>(root, false));
+            stack.push(root);
 
         while (!stack.isEmpty()) {
-            Pair<TreeNode, Boolean> entry = stack.pop();
-            TreeNode node = entry.getKey();
-            boolean visited = entry.getValue();
+            TreeNode node = stack.peek();
 
-            if (!visited) {
-                stack.push(new Pair<>(node, true));
-
-                if (node.left != null)
-                    stack.push(new Pair<>(node.left, false));
-
-                if (node.right != null)
-                    stack.push(new Pair<>(node.right, false));
+            if (node.left != null && !heights.containsKey(node.left)) {
+                stack.push(node.left);
+            } else if (node.right != null && !heights.containsKey(node.right)) {
+                stack.push(node.right);
             } else {
-                int leftHeight = height.getOrDefault(node.left, 0);
-                int rightHeight = height.getOrDefault(node.right, 0);
+                stack.pop();
+
+                int leftHeight = heights.getOrDefault(node.left, 0);
+                int rightHeight = heights.getOrDefault(node.right, 0);
 
                 diameter = Math.max(diameter, leftHeight + rightHeight);
 
                 int currentHeight = 1 + Math.max(leftHeight, rightHeight);
-                height.put(node, currentHeight);
+                heights.put(node, currentHeight);
             }
         }
 

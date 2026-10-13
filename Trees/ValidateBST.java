@@ -1,51 +1,57 @@
-import java.util.LinkedList;
-import java.util.Queue;
-
 class ValidateBST {
     boolean isValidBST(TreeNode root) {
         return helper(root, Long.MIN_VALUE, Long.MAX_VALUE);
     }
 
-    boolean helper(TreeNode root, long lowerBound, long upperBound) {
+    boolean helper(TreeNode root, int min, int max) {
         if (root == null)
             return true;
 
-        if (lowerBound < root.val && root.val < upperBound)
-            return helper(root.left, lowerBound, root.val)
-                    && helper(root.right, root.val, upperBound);
+        if (root.val <= min)
+            return false;
 
-        return false;
+        if (root.val >= max)
+            return false;
+
+        return helper(root.left, min, root.val) && helper(root.right, root.val, max);
+
     }
 
+    TreeNode prev = null;
+
     boolean isValidBST2(TreeNode root) {
-        Queue<Pair<TreeNode, long[]>> queue = new LinkedList<>();
+        if (root == null)
+            return true;
 
-        if (root != null)
-            queue.offer(new Pair<>(
-                    root,
-                    new long[] { Long.MIN_VALUE, Long.MAX_VALUE }));
+        if (!isValidBST(root.left))
+            return false;
 
-        while (!queue.isEmpty()) {
-            Pair<TreeNode, long[]> current = queue.poll();
+        if (prev != null && root.val <= prev.val)
+            return false;
 
-            TreeNode node = current.getKey();
-            long lowerBound = current.getValue()[0];
-            long upperBound = current.getValue()[1];
+        prev = root;
 
-            if (node.val <= lowerBound || node.val >= upperBound)
+        return isValidBST(root.right);
+    }
+
+    boolean isValidBST3(TreeNode root) {
+        Stack<TreeNode> stack = new Stack<>();
+        TreeNode current = root;
+        TreeNode prev = null;
+
+        while (current != null || !stack.isEmpty()) {
+            while (current != null) {
+                stack.push(current);
+                current = current.left;
+            }
+
+            current = stack.pop();
+
+            if (prev != null && current.val <= prev.val)
                 return false;
 
-            if (node.left != null)
-                queue.offer(
-                        new Pair<>(
-                                node.left,
-                                new long[] { lowerBound, node.val }));
-
-            if (node.right != null)
-                queue.offer(
-                        new Pair<>(
-                                node.right,
-                                new long[] { node.val, upperBound }));
+            prev = current;
+            current = current.right;
         }
 
         return true;
