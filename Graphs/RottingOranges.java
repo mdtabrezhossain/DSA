@@ -1,78 +1,72 @@
-import java.util.LinkedList;
-import java.util.Queue;
-
 class RottingOranges {
+    int[][] grid;
+    int m;
+    int n;
+
+    int freshCount;
+    Queue<int[]> rotten;
+
+    int[][] directions = {
+            { 0, -1 },
+            { 0, 1 },
+            { -1, 0 },
+            { 1, 0 }
+    };
+
     int orangesRotting(int[][] grid) {
-        Queue<int[]> rottenOrangesQueue = new LinkedList<>();
-        int totalFreshOranges = 0;
-        int totalRows = grid.length;
-        int totalCols = grid[0].length;
+        this.grid = grid;
+        m = grid.length;
+        n = grid[0].length;
 
-        for (int row = 0; row <= totalRows - 1; row++) {
-            for (int col = 0; col <= totalCols - 1; col++) {
-                int element = grid[row][col];
+        freshCount = 0;
+        rotten = new LinkedList<>();
 
-                if (element == 2) {
-                    int[] coordinates = { row, col };
-                    rottenOrangesQueue.offer(coordinates);
-                    grid[row][col] = 0;
-                } else if (element == 1) {
-                    totalFreshOranges++;
+        for (int row = 0; row < m; row++) {
+            for (int col = 0; col < n; col++) {
+                if (grid[row][col] == 1) {
+                    freshCount++;
+                } else if (grid[row][col] == 2) {
+                    rotten.add(new int[] { row, col });
                 }
             }
         }
 
-        int[][] directions = {
-                { 1, 0 },
-                { -1, 0 },
-                { 0, 1 },
-                { 0, -1 }
-        };
+        return spreadRotting();
+    }
+
+    int spreadRotting() {
         int minutes = 0;
 
-        while (!rottenOrangesQueue.isEmpty() && totalFreshOranges > 0) {
-            minutes++;
+        while (!rotten.isEmpty() && freshCount > 0) {
+            int rottenCount = rotten.size();
 
-            int queueSize = rottenOrangesQueue.size();
+            while (rottenCount > 0) {
+                int[] cell = rotten.poll();
+                int row = cell[0];
+                int col = cell[1];
 
-            while (queueSize > 0) {
-                int[] coordinates = rottenOrangesQueue.poll();
-                int row = coordinates[0];
-                int col = coordinates[1];
+                for (int[] direction : directions) {
+                    int newRow = row + direction[0];
+                    int newCol = col + direction[1];
 
-                for (int i = 0; i <= directions.length - 1; i++) {
-                    int newRow = row + directions[i][0];
-                    int newCol = col + directions[i][1];
+                    if (isValid(newRow, newCol) && grid[newRow][newCol] == 1) {
+                        grid[newRow][newCol] = 2;
+                        freshCount--;
 
-                    if (isValidDirection(newRow, newCol, grid) && grid[newRow][newCol] == 1) {
-                        int[] freshOrangeCoordinates = { newRow, newCol };
-                        rottenOrangesQueue.offer(freshOrangeCoordinates);
-
-                        grid[newRow][newCol] = 0;
-                        totalFreshOranges--;
+                        rotten.offer(new int[] { newRow, newCol });
                     }
                 }
 
-                queueSize--;
+                rottenCount--;
             }
+
+            minutes++;
         }
 
-        if (totalFreshOranges > 0) {
-            return -1;
-        }
-
-        return minutes;
+        return freshCount > 0 ? -1 : minutes;
     }
 
-    boolean isValidDirection(int row, int col, int[][] grid) {
-        int totalRows = grid.length;
-        int totalCols = grid[0].length;
-
-        if (row < 0 || col < 0
-                || row > totalRows - 1 || col > totalCols - 1) {
-            return false;
-        }
-
-        return true;
+    boolean isValid(int row, int col) {
+        return row >= 0 && col >= 0 && row < m && col < n;
     }
 }
