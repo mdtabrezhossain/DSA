@@ -1,56 +1,47 @@
 class ClimbingStairs {
-    int waysAtStep[];
+    int[] results;
 
-    int climbStairs(int n) {
-        waysAtStep = new int[n + 1];
-        Arrays.fill(waysAtStep, -1);
-        return findWays(0, n);
+    int climbStairs(int stairs) {
+        results = new int[stairs + 1];
+        Arrays.fill(results, -1);
+
+        return countWays(0, stairs);
     }
 
-    private int findWays(int currentStep, int totalSteps) {
-        if (currentStep > totalSteps) {
+    int countWays(int step, int stairs) {
+        if (step > stairs)
             return 0;
-        }
-        if (currentStep == totalSteps) {
+
+        if (step == stairs)
             return 1;
-        }
 
-        if (waysAtStep[currentStep] != -1) {
-            return waysAtStep[currentStep];
-        }
+        if (results[step] != -1)
+            return results[step];
 
-        int waysAfterOneStep = findWays(currentStep + 1, totalSteps);
-        int waysAfterTwoStep = findWays(currentStep + 2, totalSteps);
+        int oneStepWays = countWays(step + 1, stairs);
+        int twoStepWays = countWays(step + 2, stairs);
 
-        int totalWays = waysAfterOneStep + waysAfterTwoStep;
-        waysAtStep[currentStep] = totalWays;
+        int ways = oneStepWays + twoStepWays;
 
-        return totalWays;
+        results[step] = ways;
+
+        return ways;
     }
 
-    int climbStairs2(int steps) {
-        int[] memo = new int[steps + 2];
-        memo[steps + 1] = 0;
-        memo[steps] = 1;
+    int climbStairs2(int stairs) {
+        int[] results = new int[stairs + 1];
 
-        for (int stair = steps - 1; stair >= 0; stair--) {
-            memo[stair] = memo[stair + 1] + memo[stair + 2];
+        results[1] = 1;
+        results[2] = 2;
+
+        for (int step = 3; step <= stairs; step++) {
+            int oneStepBackWays = results[step - 1];
+            int twoStepBackWays = results[step - 2];
+
+            int ways = oneStepBackWays + twoStepBackWays;
+            results[step] = ways;
         }
 
-        return memo[0];
-    }
-
-    int climbStairs3(int steps) {
-        int waysFromNext = 1;
-        int waysFromAfterNext = 0;
-
-        for (int stair = steps - 1; stair >= 0; stair--) {
-            int ways = waysFromNext + waysFromAfterNext;
-
-            waysFromAfterNext = waysFromNext;
-            waysFromNext = ways;
-        }
-
-        return waysFromNext;
+        return results[stairs];
     }
 }
